@@ -113,7 +113,8 @@ def test_image_from_pil():
     ],
 )
 def test_write_ai_generated_xmp(tmp_path, format, workflow_kind, source_type):
-    image = create_test_image(16, 16)
+    # images smaller than 64x64 fall back to JPEG due to a Qt6 VP8L encoder bug
+    image = create_test_image(64, 64)
     path = tmp_path / f"generated.{format.extension}"
     image.save(path, format)
     image.write_xmp_metadata(path, create_ai_generated_xmp(workflow_kind))
